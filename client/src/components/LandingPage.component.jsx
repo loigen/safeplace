@@ -29,16 +29,15 @@ const testimonies = [
   },
   {
     id: 4,
-    name: "Jackilou F..",
+    name: "Jackilou F.",
     text: "Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.",
   },
 ];
-const categories = document.querySelectorAll(".Category");
-const navlinks = document.querySelectorAll(".navlinks");
-
 
 const LandingPage = () => {
   const [currentTestimonyIndex, setCurrentTestimonyIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("All category");
+  const [activeNavLink, setActiveNavLink] = useState("ABOUT");
 
   const handleNext = () => {
     setCurrentTestimonyIndex(
@@ -51,19 +50,15 @@ const LandingPage = () => {
       (prevIndex) => (prevIndex - 2 + testimonies.length) % testimonies.length
     );
   };
-  categories.forEach((category) => {
-    category.addEventListener("click", () => {
-      categories.forEach((c) => c.classList.remove("active"));
-      category.classList.add("active");
-    });
-  });
 
-  navlinks.forEach((navlink) => {
-    navlink.addEventListener("click", () => {
-        navlinks.forEach((c) => c.classList.remove("active"));
-      navlink.classList.add("active");
-    });
-  });
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+  };
+
+  const handleNavLinkClick = (navLink) => {
+    setActiveNavLink(navLink);
+  };
+
   return (
     <>
       <div className="navbar flex flex-grow justify-between">
@@ -194,10 +189,19 @@ const LandingPage = () => {
             <h1>Blog</h1>
           </center>
           <div className="Categories">
-            <div class="Category">All category</div>
-            <div class="Category">Category 1</div>
-            <div class="Category">Category 2</div>
-            <div class="Category">Category 3</div>
+            {["All category", "Category 1", "Category 2", "Category 3"].map(
+              (category) => (
+                <div
+                  key={category}
+                  className={`Category ${
+                    activeCategory === category ? "active" : ""
+                  }`}
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  {category}
+                </div>
+              )
+            )}
           </div>
 
           <div className="blogContent">
@@ -231,22 +235,31 @@ const LandingPage = () => {
           <button>Schedule an Appointment</button>
         </section>
         <section className="bottomNavlinks">
-          <section class="bottomNavlinks">
-            <a href="" class="navlinks">
-              HOME
+          {[
+            "HOME",
+            "ABOUT",
+            "SERVICE",
+            "CONTACT",
+            "PRIVACY POLICY",
+            "TERMS OF USE",
+          ].map((navLink) => (
+            <a
+              key={navLink}
+              href={`/${navLink.toLowerCase().replace(/ /g, "")}`}
+              className={`navlinks ${
+                activeNavLink === navLink ? "active" : ""
+              }`}
+              onClick={() => handleNavLinkClick(navLink)}
+            >
+              {navLink}
             </a>
-            <a href="#" class="navlinks active">ABOUT</a>
-            <a href="#" class="navlinks">SERVICE</a>
-            <a href="#" class="navlinks">CONTACT</a>
-            <a href="#" class="navlinks">PRIVACY POLICY</a>
-            <a href="#" class="navlinks">TERMS OF USE</a>
-          </section>
+          ))}
         </section>
         <h1 className="bottomH1">Opening Hours : Mon-Friday 8AM - 5 PM</h1>
       </section>
       <hr />
       <section>
-        <Footer/>
+        <Footer />
       </section>
     </>
   );
